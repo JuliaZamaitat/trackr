@@ -36,10 +36,10 @@ app.use(express.json());
 
 app.use(cors());
 
-
 app.set("port", process.env.PORT || 3000);
-app.use(serveStatic(__dirname + "/dist"));
+
 app.use("/", router);
+app.use(serveStatic(__dirname + '/dist'));
 
 
 app.listen(app.get("port"), () => {
