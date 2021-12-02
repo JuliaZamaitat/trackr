@@ -17,5 +17,19 @@ module.exports = {
 };
 
 //TODO: Post
+//Beispiel:
+// create: (req, res) => {
+//   let studyplanParams = {
+//     program: req.body.program,
+//   };
+//   StudyPlan.create(studyplanParams)
+//     .then((studyPlan) => {
+//       res.json(studyPlan);
+//     })
+//     .catch((error) => {
+//       console.log(`Error saving studyplan: ${error.message}`);
+//       return;
+//     });
+// },
 // Todo: Put/patch (updaten)
 //Todo: Delete

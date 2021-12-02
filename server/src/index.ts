@@ -1,12 +1,10 @@
 import { Error } from "mongoose";
-
 const express = require("express"),
 	app = express(),
 	mongoose = require("mongoose"),
 	cors = require("cors"),
 	router = require("./routes/index"),
-	historyMode = require("connect-history-api-fallback"),
-	serveStatic = require("serve-static");
+	historyMode = require("connect-history-api-fallback");
 
 app.use(express.json());
 app.use(express.urlencoded());
@@ -23,9 +21,9 @@ mongoose.connect(mongodbURI, { useNewUrlParser: true }).then(
 	}
 );
 // mongoose.set("useFindAndModify", false);
-app.use(historyMode({
-	verbose: true
-}));
+// app.use(historyMode({
+// 	verbose: true
+// }));
 
 app.use(
 	express.urlencoded({
@@ -39,7 +37,6 @@ app.use(cors());
 app.set("port", process.env.PORT || 3000);
 
 app.use("/", router);
-app.use(serveStatic(__dirname + '/dist'));
 
 
 app.listen(app.get("port"), () => {
