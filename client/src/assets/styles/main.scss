@@ -1,0 +1,187 @@
+@use 'colors' as *;
+@use 'typography' as *;
+// @use 'media-query' as *;
+// @use 'fonts' as *;
+
+
+:root {
+    /* colors */
+    --clr-black: #000000;
+    --clr-white: #ffffff;
+    --clr-white-300: #f1f1f184;
+    
+    /* font-sizes */
+    --fs-900: 3.75rem; //60px
+    --fs-800: 3.125rem;//50px
+    --fs-700: 2.5rem; //40px
+    --fs-600: 1.875rem; //30px
+    --fs-500: 1.25rem; //20px
+    --fs-400: 1.125rem; //18px
+    --fs-300: 1rem; //16px
+
+    /* type weight */
+    --fw-thin: 300;
+    --fw-regular: 400;
+    --fw-medium: 500;
+    --fw-bold: 700;
+    --extra-bold: 900;
+
+    /* line height */
+    --lh-100: 1.125rem; //18px
+    --lh-200: 1.5rem; //24px
+    --lh-300: 2.313rem; //37px
+    --lh-400: 3.125rem; //50px
+    
+
+    /* font-families */
+    // --ff-serif: "Bellefair", serif;
+    // --ff-sans-cond: "Barlow Condensed", sans-serif;
+    // --ff-sans-normal: "Barlow", sans-serif;
+
+/* ------------------- */
+/* Reset               */
+/* ------------------- */
+
+/* https://piccalil.li/blog/a-modern-css-reset/ */
+
+/* Box sizing */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+/* Reset margins */
+body,
+h1,
+h2,
+h3,
+h4,
+h5,
+p,
+figure,
+picture {
+  margin: 0; 
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p {
+  font-weight: var(--fw-regular);
+}
+
+body {
+  font-family: Avenir, Helvetica, Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-align: center;
+  color: #2c3e50;
+  width: 80vw;
+  margin: 0 auto;
+  font-size: var(--fs-500);
+  background-color: var(--clr-purple-100);
+  line-height: var(--lh-200);
+  min-height: 100vh;
+}
+
+
+h1 {
+  // font-family: "Montserrat", sans-serif;
+  color: var(--clr-black);
+  font-size: var(--fs-700);
+  font-weight: var(--fw-bold);
+  line-height: var(--lh-400);
+  letter-spacing: 0.1em;
+}
+
+h2 {
+  // font-family: "Montserrat", sans-serif;
+  font-size: var(--fs-600);
+  font-weight: var(--fw-bold);
+  line-height: var(--lh-300);
+}
+
+h3 {
+  // font-family: "Montserrat", sans-serif;
+  font-size: var(--fs-500);
+  font-weight: var(--fw-bold);
+  line-height: var(--lh-200);
+  letter-spacing: 0.1em;
+}
+
+/* make images easier to work with */
+img,
+picture {
+  max-width: 100%;
+  display: block;
+}
+
+/* make form elements easier to work with */
+input,
+button,
+textarea,
+select {
+  font: inherit;
+}
+
+input {
+  display: inline;
+  cursor: pointer;
+  background: none;
+  border: none;
+  color: var(--clr-white-100);
+  font-weight: var(--fw-thin);
+  letter-spacing: 0.1em;  
+  &::placeholder {
+    color: var(--clr-white-300);
+    font-weight: var(--fw-thin);
+  }
+   &:focus-visible {
+    outline: none;
+  }
+}
+
+ol, ul {
+	list-style: none;
+}
+
+a, a:hover, a:focus, a:active {
+  text-decoration: none;
+  color: inherit;
+}
+
+#nav {
+  padding: 30px;
+
+  a {
+    font-weight: bold;
+    color: #2c3e50;
+
+    &.router-link-exact-active {
+      color: #42b983;
+    }
+  }
+}
+
+/* remove animations for people who've turned them off */
+@media (prefers-reduced-motion: reduce) {  
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+
+/* ------------------- */
+/* Utility classes     */
+/* ------------------- */
+
+}
