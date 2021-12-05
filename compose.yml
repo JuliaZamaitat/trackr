@@ -24,7 +24,7 @@ services:
 #      - NODE_ENV=production
 #      - PORT=3000
     ports:
-        - "8000:8000"
+        - "8080:8080"
     restart: "unless-stopped"
   mongo:
     image: mongo:5.0
