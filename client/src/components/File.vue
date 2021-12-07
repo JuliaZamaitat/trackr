@@ -1,14 +1,12 @@
 <template>
   <div class="container">
     <h2>File Details</h2>
-    <!-- <font-awesome-icon class="icon" :icon="['fas', 'fa-file']" size="2x" /> -->
-
     <div class="left">
       <ul id="fileliste">
         <li
-          v-for="value in getFiles(fileVersions, currentId)"
+          v-for="(value, index) in fileVersions"
           v-bind:key="value"
-          @click="selectedFileChange(value.id)"
+          @click="selectedFileChange(index)"
         >
           {{ value.title }}
         </li>
@@ -23,14 +21,16 @@
 </template>
 
 <script lang="ts">
-export default {
-  el: "#fileliste",
-  data: function (vm: any) {
+import { defineComponent } from "vue";
+export default defineComponent({
+  // el: "#fileliste",
+  data() {
     return {
       currentFiles: [],
       currentId: Number(window.location.pathname.split("/")[2]),
       selectedFile: { id: 0, title: "", content: "", created_at: null },
-      fileVersions: [
+      fileVersions: [] as Array<any>,
+      allFileVersions: [
         //So sehen die Daten später aus, die wir über die API Schnittstelle bekommen
         {
           title: "Meine ersten Files",
@@ -63,7 +63,7 @@ export default {
             },
             {
               id: 213,
-              title: "Testtest",
+              title: "Testtest2222",
               content: "Lorem Ipsum xsxsxsxsqqwq",
               created_at: Date(),
             },
@@ -72,29 +72,24 @@ export default {
       ],
     };
   },
+
+  mounted() {
+    for (const file in this.allFileVersions) {
+      const element = this.allFileVersions[file];
+      if (element.id == this.currentId) {
+        for (const currentFile in element.files) {
+          this.fileVersions.push(element.files[currentFile]);
+        }
+      }
+    }
+  },
   methods: {
-    // Get Files Method
-    getFiles: (fileVersions: any, currentId: any): any =>
-      fileVersions.find((x: any) => x.id == currentId)?.files,
-    // Get Selected File Method
-    selectedFileChange: function (id: any): any {
-      var vm: any = this;
-      const currentFiles = vm.fileVersions.find(
-        (x: any) => x.id == vm.currentId
-      )?.files;
-      const selectedFile = currentFiles.find((x: any) => x.id == id);
-      // vm.selectedFile = { content: selectedFile.content };
-      vm.selectedFile = selectedFile;
+    selectedFileChange(index: any) {
+      const currentFile = this.fileVersions[index];
+      this.selectedFile = currentFile;
     },
   },
-  mounted: () => {
-    console.log("Component Mounted.");
-  },
-  created: () => {
-    console.log("Component Created...");
-    var vm: any = this;
-  },
-};
+});
 </script>
 
 <style lang="scss" scoped>
