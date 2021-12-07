@@ -23,4 +23,4 @@ cd server & npm start
 - build the project with `docker compose build`
 - run it using `docker compose up -d`
 - look at the output with `docker compose logs` 
-- to stop the containers enter `docker compose down`
+- to stop the containers enter `docker compose down` 
