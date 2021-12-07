@@ -11,8 +11,13 @@ cd client & npm install
 cd server & npm install
 ```
 
-### Compiles and hot-reloads for development
+## Compiles and hot-reloads for development
 ```
 cd client & npm run serve
 cd server & npm start
 ```
+
+## Docker
+
+First build the project with `docker compose build`
+Second run it using `docker compose up -d`, look at output with `docker compose logs` or stop it via `docker compose down`.
