@@ -1,21 +1,25 @@
 <template>
+  <h2>File Details von {{ currentFileVersion.title }}</h2>
   <div class="container">
-    <h2>File Details</h2>
     <div class="left">
       <ul id="fileliste">
         <li
+          class="file"
           v-for="(value, index) in fileVersions"
           v-bind:key="value"
           @click="selectedFileChange(index)"
         >
-          {{ value.title }}
+          <p class="title">{{ value.title }}</p>
+          <p>&nbsp;|&nbsp;</p>
+
+          <p class="date">{{ getDate(value.created_at) }}</p>
         </li>
       </ul>
     </div>
     <div class="right">
-      <p>content : {{ selectedFile?.content }}</p>
+      <p>Inhalt : {{ selectedFile?.content }}</p>
       <br />
-      <p>created_at : {{ selectedFile?.created_at }}</p>
+      <p>Erstellt am : {{ getDate(selectedFile?.created_at) }}</p>
     </div>
   </div>
 </template>
@@ -23,15 +27,13 @@
 <script lang="ts">
 import { defineComponent } from "vue";
 export default defineComponent({
-  // el: "#fileliste",
   data() {
     return {
-      currentFiles: [],
+      currentFileVersion: {},
       currentId: Number(window.location.pathname.split("/")[2]),
       selectedFile: { id: 0, title: "", content: "", created_at: null },
       fileVersions: [] as Array<any>,
       allFileVersions: [
-        //So sehen die Daten später aus, die wir über die API Schnittstelle bekommen
         {
           title: "Meine ersten Files",
           id: 2,
@@ -77,6 +79,7 @@ export default defineComponent({
     for (const file in this.allFileVersions) {
       const element = this.allFileVersions[file];
       if (element.id == this.currentId) {
+        this.currentFileVersion = element;
         for (const currentFile in element.files) {
           this.fileVersions.push(element.files[currentFile]);
         }
@@ -88,6 +91,14 @@ export default defineComponent({
       const currentFile = this.fileVersions[index];
       this.selectedFile = currentFile;
     },
+    getDate(value: any) {
+      var dt = new Date(value);
+      var dtd = dt.getDay();
+      var dtm = dt.getMonth();
+      var dty = dt.getFullYear();
+
+      return dtd + "/" + dtm + "/" + dty;
+    },
   },
 });
 </script>
@@ -97,13 +108,6 @@ h2 {
   text-align: left;
 }
 
-.fileVersions {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: left;
-  margin-block: 3rem;
-  gap: 2rem;
-}
 .container {
   display: flex;
   margin-top: 10%;
@@ -120,5 +124,16 @@ h2 {
 
 .icon {
   margin-bottom: 1.5rem;
+}
+
+.file {
+  cursor: pointer;
+  p {
+    display: inline;
+  }
+
+  .title {
+    font-weight: bold;
+  }
 }
 </style>
