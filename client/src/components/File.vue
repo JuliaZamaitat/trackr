@@ -1,37 +1,39 @@
 <template>
+  <h2>File Details von {{ currentFileVersion.title }}</h2>
   <div class="container">
-    <h2>File Details</h2>
-    <!-- <font-awesome-icon class="icon" :icon="['fas', 'fa-file']" size="2x" /> -->
-
     <div class="left">
       <ul id="fileliste">
         <li
-          v-for="value in getFiles(fileVersions, currentId)"
+          class="file"
+          v-for="(value, index) in fileVersions"
           v-bind:key="value"
-          @click="selectedFileChange(value.id)"
+          @click="selectedFileChange(index)"
         >
-          {{ value.title }}
+          <p class="title">{{ value.title }}</p>
+          <p>&nbsp;|&nbsp;</p>
+
+          <p class="date">{{ getDate(value.created_at) }}</p>
         </li>
       </ul>
     </div>
     <div class="right">
-      <p>content : {{ selectedFile?.content }}</p>
+      <p>Inhalt : {{ selectedFile?.content }}</p>
       <br />
-      <p>created_at : {{ selectedFile?.created_at }}</p>
+      <p>Erstellt am : {{ getDate(selectedFile?.created_at) }}</p>
     </div>
   </div>
 </template>
 
 <script lang="ts">
-export default {
-  el: "#fileliste",
-  data: function (vm: any) {
+import { defineComponent } from "vue";
+export default defineComponent({
+  data() {
     return {
-      currentFiles: [],
+      currentFileVersion: {},
       currentId: Number(window.location.pathname.split("/")[2]),
       selectedFile: { id: 0, title: "", content: "", created_at: null },
-      fileVersions: [
-        //So sehen die Daten später aus, die wir über die API Schnittstelle bekommen
+      fileVersions: [] as Array<any>,
+      allFileVersions: [
         {
           title: "Meine ersten Files",
           id: 2,
@@ -63,7 +65,7 @@ export default {
             },
             {
               id: 213,
-              title: "Testtest",
+              title: "Testtest2222",
               content: "Lorem Ipsum xsxsxsxsqqwq",
               created_at: Date(),
             },
@@ -72,29 +74,33 @@ export default {
       ],
     };
   },
+
+  mounted() {
+    for (const file in this.allFileVersions) {
+      const element = this.allFileVersions[file];
+      if (element.id == this.currentId) {
+        this.currentFileVersion = element;
+        for (const currentFile in element.files) {
+          this.fileVersions.push(element.files[currentFile]);
+        }
+      }
+    }
+  },
   methods: {
-    // Get Files Method
-    getFiles: (fileVersions: any, currentId: any): any =>
-      fileVersions.find((x: any) => x.id == currentId)?.files,
-    // Get Selected File Method
-    selectedFileChange: function (id: any): any {
-      var vm: any = this;
-      const currentFiles = vm.fileVersions.find(
-        (x: any) => x.id == vm.currentId
-      )?.files;
-      const selectedFile = currentFiles.find((x: any) => x.id == id);
-      // vm.selectedFile = { content: selectedFile.content };
-      vm.selectedFile = selectedFile;
+    selectedFileChange(index: any) {
+      const currentFile = this.fileVersions[index];
+      this.selectedFile = currentFile;
+    },
+    getDate(value: any) {
+      var dt = new Date(value);
+      var dtd = dt.getDay();
+      var dtm = dt.getMonth();
+      var dty = dt.getFullYear();
+
+      return dtd + "/" + dtm + "/" + dty;
     },
   },
-  mounted: () => {
-    console.log("Component Mounted.");
-  },
-  created: () => {
-    console.log("Component Created...");
-    var vm: any = this;
-  },
-};
+});
 </script>
 
 <style lang="scss" scoped>
@@ -102,13 +108,6 @@ h2 {
   text-align: left;
 }
 
-.fileVersions {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: left;
-  margin-block: 3rem;
-  gap: 2rem;
-}
 .container {
   display: flex;
   margin-top: 10%;
@@ -125,5 +124,16 @@ h2 {
 
 .icon {
   margin-bottom: 1.5rem;
+}
+
+.file {
+  cursor: pointer;
+  p {
+    display: inline;
+  }
+
+  .title {
+    font-weight: bold;
+  }
 }
 </style>

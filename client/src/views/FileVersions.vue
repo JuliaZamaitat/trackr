@@ -21,7 +21,9 @@
 </template>
 
 <script lang="ts">
-export default {
+import { defineComponent } from "vue";
+
+export default defineComponent({
   data() {
     return {
       fileVersions: [
@@ -62,7 +64,7 @@ export default {
       ],
     };
   },
-};
+});
 </script>
 
 <style lang="scss" scoped>
