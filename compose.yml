@@ -10,7 +10,8 @@ services:
       - "PORT=3000"
       - "MONGO_INITDB_DATABASE=trackr"
 #    volumes:
-#      - ./server:/app
+#     - ./server/src:/app/src:ro
+    user: "${UID}:${DID}"
     ports:
         - "3000:3000"
     restart: "unless-stopped"
@@ -31,8 +32,8 @@ services:
     restart: "unless-stopped"
     volumes:
       - ./data/mongo:/data/db
-    environment:
-      MONGO_INITDB_ROOT_USERNAME: root
-      MONGO_INITDB_ROOT_PASSWORD: example
+#    environment:
+#      MONGO_INITDB_ROOT_USERNAME: root
+#      MONGO_INITDB_ROOT_PASSWORD: example
     ports:
         - "27017:27017"

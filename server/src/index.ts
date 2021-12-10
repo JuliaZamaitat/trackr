@@ -12,7 +12,7 @@ app.use(express.urlencoded());
 const mongodbURI =
   process.env.MONGODB_URI || "mongodb://localhost:27017/trackr";
 
-mongoose.connect(mongodbURI, { useNewUrlParser: true }).then(
+mongoose.connect(mongodbURI, { useNewUrlParser: true}).then(
 	() => {
 		console.log("Database is connected");
 	},

@@ -4,6 +4,8 @@ const fileController = require("../controller/fileController"),
 
 
 router.get("/:id", fileController.find);
-//routen für alle weiteren methoden hinzufügen
+router.post("/", fileController.create);
+router.delete("/:id", fileController.delete);
+router.put("/:id", fileController.update)
 
 module.exports = router;
