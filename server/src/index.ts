@@ -7,17 +7,17 @@ const express = require("express"),
 	historyMode = require("connect-history-api-fallback");
 
 app.use(express.json());
-app.use(express.urlencoded());
+app.use(express.urlencoded({ extended: true }));
 
 const mongodbURI =
   process.env.MONGODB_URI || "mongodb://localhost:27017/trackr";
 
-mongoose.connect(mongodbURI, { useNewUrlParser: true}).then(
+mongoose.connect(mongodbURI, { useNewUrlParser: true }).then(
 	() => {
 		console.log("Database is connected");
 	},
 	(err: Error) => {
-		console.log("Can not connect to the database" + err);
+		console.log("Can not connect to the database:" + err);
 	}
 );
 // mongoose.set("useFindAndModify", false);

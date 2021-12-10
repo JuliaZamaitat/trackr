@@ -9,9 +9,9 @@ services:
       - "MONGODB_URI=mongodb://mongo:27017/trackr"
       - "PORT=3000"
       - "MONGO_INITDB_DATABASE=trackr"
-#    volumes:
-#     - ./server/src:/app/src:ro
-    user: "${UID}:${DID}"
+    # volumes:
+    #  - ./server/src:/app/src:ro
+    # user: "${UID}:${GID}"
     ports:
         - "3000:3000"
     restart: "unless-stopped"
@@ -23,13 +23,14 @@ services:
       dockerfile: Dockerfile
 #    environment:
 #      - NODE_ENV=production
-#      - PORT=3000
+#      - PORT=8080
     ports:
         - "8080:8080"
     restart: "unless-stopped"
   mongo:
     image: mongo:5.0
     restart: "unless-stopped"
+#    user: "${UID}:${GID}"
     volumes:
       - ./data/mongo:/data/db
 #    environment:

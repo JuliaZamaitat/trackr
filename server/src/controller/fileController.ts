@@ -4,9 +4,8 @@ const File = require("../model/file");
 
 module.exports = {
   find: (req: Request, res: Response) => {  
-    console.log("finding file");
-    console.log(req);
     let fileId = req.params.id;
+    console.log(`finding file: ${fileId}`);
     File.findById(fileId)
       .then((file: any) => {
         res.json(file);
@@ -22,59 +21,48 @@ module.exports = {
       createdAt: Date.now(),
       content: req.body.content
     }
+    console.log(`creating file: ${fileParams}`);
     File.create(fileParams)
     .then((file: File) => {
       res.json(file)
     })
     .catch((error: Error) => {
-      console.log('Could not create new file: ' + error.message)
+      console.log(`Error creating new file: ${error.message}`)
       return;
     })
   },
 
   delete: (req: Request, res: Response) => {
     let fileId = req.params.id;
-    File.delete(fileId)
+    console.log(`deleting file: ${fileId}`);
+    File.findByIdAndDelete(fileId)
     .then((file: File) => {
-      res.json("File deleted: ${file.id}")
+      res.json(`File deleted: ${fileId}`)
     })
     .catch((error: Error) => {
-      console.log('Could not delete file: ${error.message}')
+      console.log(`Error deleting file by ID: ${error.message}`)
       return;
     })
   },
 
   update: (req: Request, res: Response) => {
-    let fileParams = {
-      fileId: req.body.id,
-      fileTitle: req.body.title,
-      fileContent: req.body.content
-    } 
-    File.update(fileParams)
+    let fileId = req.params.id;
+    console.log(`updating file: ${fileId}`);
+    File.findByIdAndUpdate(fileId,
+      {
+        $set: {
+          title: req.body.title,
+          content: req.body.content,
+        },
+      },
+      { new: true }
+    )
     .then((file: File) => {
       res.json(file)
     })
     .catch((error: Error) => {
-      console.log('Could not update file: ${error.message}')
+      console.log(`Could not update file: ${error.message}`)
       return;
     })
   }
 };
-
-//TODO: Post
-//Beispiel:
-// create: (req, res) => {
-//   let studyplanParams = {
-//     program: req.body.program,
-//   };
-//   StudyPlan.create(studyplanParams)
-//     .then((studyPlan) => {
-//       res.json(studyPlan);
-//     })
-//     .catch((error) => {
-//       console.log(`Error saving studyplan: ${error.message}`);
-//       return;
-//     });
-// },
-// Todo: Put/patch (updaten)
-//Todo: Delete
