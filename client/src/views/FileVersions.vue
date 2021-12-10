@@ -10,20 +10,24 @@
             props: { files: files },
           }"
         >
-          <div class="icon">
-            <i class="fas fa-file fa-5x"></i>
-          </div>
+          <i class="fas fa-file fa-5x"></i>
         </router-link>
         {{ files.title }}
       </div>
     </div>
+    <UploadButton />
   </div>
 </template>
 
 <script lang="ts">
 import { defineComponent } from "vue";
+import UploadButton from "../components/UploadButton.vue";
 
 export default defineComponent({
+  components: { UploadButton },
+  mounted() {
+    // this.$store.dispatch("fileversions/fetchFileVersions");
+  },
   data() {
     return {
       fileVersions: [
@@ -76,11 +80,21 @@ h2 {
   display: flex;
   flex-wrap: wrap;
   justify-content: left;
-  margin-block: 3rem;
+  margin-block: 5rem;
   gap: 2rem;
+  pointer-events: none;
 }
 
-.icon {
-  margin-bottom: 1.5rem;
+::v-deep .fa-file {
+  display: block;
+  margin: 0 auto;
+  pointer-events: all;
+  margin-bottom: 0.7rem;
+  transition: all 0.3s ease 0s;
+
+  &:hover {
+    color: #2ee59d;
+    transform: translateY(-7px);
+  }
 }
 </style>
