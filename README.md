@@ -18,15 +18,10 @@ cd server & npm start
 ```
 
 ## Docker
-<<<<<<< HEAD
 
-First build the project with `docker compose build`
-Second run it using `docker compose up -d`, look at output with `docker compose logs` or stop it via `docker compose down`.
-=======
-- create a folder called `mongo` in the parent directory 
-- change into the folder with `cd mongo` and create folder called `data`
+- create a folder called `data` in the parent directory 
+- change into the folder with `cd data` and create folder called `mongo`
 - build the project with `docker compose build`
 - run it using `docker compose up -d`
 - look at the output with `docker compose logs` 
 - to stop the containers enter `docker compose down`
->>>>>>> 5974fbf (README changes)
