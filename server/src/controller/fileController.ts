@@ -8,11 +8,25 @@ module.exports = {
     console.log(`finding file: ${fileId}`);
     File.findById(fileId)
       .then((file: any) => {
-        res.json(file);
+        res.status(200).json(file);
       })
       .catch((error: Error) => {
-        console.log(`Error fetching file by ID: ${error.message}`);
+        res.status(500).json(`Error fetching file by ID: ${error.message}`);
       });
+  },
+
+  findAll: (req: Request, res: Response) => {
+    const allFiles = 
+    File.find().then(() => {
+      if (!allFiles) throw new Error("No files found");
+      // const sorted = allFiles.sort((a: File, b: File) => {
+      //   return a.createdAt.getTime() - new Date(b.date).getTime();
+      // })
+      res.status(200).json(allFiles);
+    }).catch((error: Error) => {
+
+    });
+    
   },
 
   create: (req: Request, res: Response) => {
@@ -24,7 +38,7 @@ module.exports = {
     console.log(`creating file: ${fileParams}`);
     File.create(fileParams)
     .then((file: File) => {
-      res.json(file)
+      res.status(201).json(file)
     })
     .catch((error: Error) => {
       console.log(`Error creating new file: ${error.message}`)
