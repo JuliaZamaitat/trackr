@@ -5,7 +5,7 @@ const mongoose = require("mongoose"),
     fileVersions: [
       {
         fileVersion: {
-          type: Schema.Types.ObjectId,
+          type: Schema.Types.Object,
           ref: "FileVersion",
         },
       },

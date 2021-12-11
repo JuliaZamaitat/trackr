@@ -1,7 +1,6 @@
 const mongoose = require("mongoose"),
   { Schema } = mongoose,
   fileVersion = Schema({
-    title: String,
     createdAt: {
       type: Date,
       required: true,

@@ -1,5 +1,3 @@
-import { Request, Response } from "express";
-
 const router = require("express").Router(),
     fileController = require("../controller/fileController"),
     fileVersionController = require("../controller/fileVersionController");
