@@ -4,7 +4,7 @@ const File = require("../model/file");
 
 module.exports = {
   find: (req: Request, res: Response) => {  
-    let fileId = req.params.id;
+    let fileId = req.params.fileId;
     console.log(`finding file: ${fileId}`);
     File.findById(fileId)
       .then((file: any) => {
@@ -16,8 +16,7 @@ module.exports = {
   },
 
   findAll: (req: Request, res: Response) => {
-    const allFiles = 
-    File.find().then(() => {
+    File.find().then((allFiles: any) => {
       if (!allFiles) throw new Error("No files found");
       // const sorted = allFiles.sort((a: File, b: File) => {
       //   return a.createdAt.getTime() - new Date(b.date).getTime();
@@ -47,7 +46,7 @@ module.exports = {
   },
 
   delete: (req: Request, res: Response) => {
-    let fileId = req.params.id;
+    let fileId = req.params.fileId;
     console.log(`deleting file: ${fileId}`);
     File.findByIdAndDelete(fileId)
     .then((file: File) => {
@@ -60,7 +59,7 @@ module.exports = {
   },
 
   update: (req: Request, res: Response) => {
-    let fileId = req.params.id;
+    let fileId = req.params.fileId;
     console.log(`updating file: ${fileId}`);
     File.findByIdAndUpdate(fileId,
       {
