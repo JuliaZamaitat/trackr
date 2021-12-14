@@ -12,10 +12,11 @@ module.exports = {
           })
           .catch((error: Error) => {
             res.status(500).send(`Error fetching file versions by ID: ${error.message}`);
+            return;
           });
       },
 
-      findAll: (req: Request, res: Response) => {
+    findAll: (req: Request, res: Response) => {
         FileVersions.find().then((allFileVersions: any) => {
           if (!allFileVersions){
             res.status(404).send("No file versions found")
@@ -23,6 +24,7 @@ module.exports = {
           res.status(200).json(allFileVersions);
         }).catch((error: Error) => {
             res.status(500).send(`Error fetching file versions: ${error.message}`);
+            return;
         });
     },
 
@@ -36,28 +38,28 @@ module.exports = {
         })
         .catch((error: Error) => {
           res.status(500).send(`Error creating new file versions: ${error.message}`);
+          return;
         })
     },
 
     delete: (req: Request, res: Response) => {
         let fileVersionsId = req.params.fileVersionsId;
-        console.log(`File versions deleted: ${fileVersionsId}`);
-        File.findByIdAndDelete(fileVersionsId)
-        .then((file: File) => {
-          res.json(`File versions deleted: ${fileVersionsId}`)
+        FileVersions.findByIdAndDelete(fileVersionsId)
+        .then((fileVersions: any) => {
+          res.json(`File versions deleted: ${fileVersions.id}`)
         })
         .catch((error: Error) => {
-          console.log(`Error deleting file versions by ID: ${error.message}`)
-          return;
+            res.status(500).send(`Error deleting file versions by ID: ${error.message}`)
+            return;
         })
     },
 
     update: (req: Request, res: Response) => {
-        let fileVersionId = req.params.fileId;
-        FileVersions.findByIdAndUpdate(fileVersionId,
+        let fileVersionsId = req.params.fileVersionsId;
+        FileVersions.findByIdAndUpdate(fileVersionsId,
           {
             $set: {
-              content: req.body.content
+              title: req.body.title
             },
           },
           { new: true }
@@ -67,6 +69,7 @@ module.exports = {
         })
         .catch((error: Error) => {
           res.status(500).send(`Could not update file versions: ${error.message}`);
+          return;
         })
       }
 };

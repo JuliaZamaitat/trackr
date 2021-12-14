@@ -5,14 +5,15 @@ const File = require("../model/file"),
 
 module.exports = {
   find: (req: Request, res: Response) => {  
-    let fileId = req.params.id;
+    let fileId = req.params.fileId;
     console.log(`finding file: ${fileId}`);
     File.findById(fileId)
       .then((file: any) => {
         res.json(file);
       })
       .catch((error: Error) => {
-        console.log(`Error fetching file by ID: ${error.message}`);
+        res.status(500).send(`Error fetching file by ID: ${error.message}`);
+        return;
       });
   },
 
@@ -28,6 +29,7 @@ module.exports = {
     })
     .catch((error: Error) => {
         res.status(500).send(`Error fetching files: ${error.message}`);
+        return;
     });
   },
 
@@ -40,8 +42,9 @@ module.exports = {
     }
     File.create(fileParams)
     .then((file: any) => {
+      console.log(file)
         FileVersions.findByIdAndUpdate(fileVersionsId,
-            { $set: { files: file } },
+            { $push: { files: file } },
             { new: true }
         )
         .then((file: any) => {
@@ -50,29 +53,33 @@ module.exports = {
         })
         .catch((error: Error) => {
             res.status(500).send(`Could not find parent file: ${error.message}`);
+            return;
         })
     })
     .catch((error: Error) => {
         res.status(500).send(`Error creating file version: ${error.message}`);
+        return;
     })
-},
+  },
 
   delete: (req: Request, res: Response) => {
-    let fileId = req.params.id;
-    console.log(`deleting file: ${fileId}`);
+    let fileId = req.params.fileId;
+    let fileVersionsId = req.params.fileVersionsId;
+    FileVersions.findByIdAndUpdate(fileVersionsId,
+      { $pull: { files: { _id: fileId } } }
+    )
     File.findByIdAndDelete(fileId)
-    .then((file: File) => {
-      res.json(`File deleted: ${fileId}`)
+    .then((file: any) => {
+        res.status(200).send(`File deleted: ${file.id}`)
     })
     .catch((error: Error) => {
-      console.log(`Error deleting file by ID: ${error.message}`)
+      res.status(500).send(`Error deleting file by ID: ${error.message}`);
       return;
     })
   },
 
   update: (req: Request, res: Response) => {
-    let fileId = req.params.id;
-    console.log(`updating file: ${fileId}`);
+    let fileId = req.params.fileId;
     File.findByIdAndUpdate(fileId,
       {
         $set: {
@@ -86,7 +93,7 @@ module.exports = {
       res.json(file)
     })
     .catch((error: Error) => {
-      console.log(`Could not update file: ${error.message}`)
+      res.status(500).send(`Could not update file: ${error.message}`);
       return;
     })
   }
