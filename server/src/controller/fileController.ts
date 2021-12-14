@@ -46,7 +46,6 @@ module.exports = {
             { new: true }
         )
         .then((file: any) => {
-            console.log(file)
             res.status(201).json(file)
         })
         .catch((error: Error) => {
@@ -65,10 +64,11 @@ module.exports = {
     let fileVersionsId = req.params.fileVersionsId;
     FileVersions.findByIdAndUpdate(fileVersionsId,
       { $pull: { files: { _id: fileId } } }
-    )
-    File.findByIdAndDelete(fileId)
+    ).then(() => {
+      File.findByIdAndDelete(fileId)
     .then((file: any) => {
-        res.status(200).send(`File deleted: ${file.id}`)
+        res.status(200).send(`File deleted: ${fileId}`)
+    })
     })
     .catch((error: Error) => {
       res.status(500).send(`Error deleting file by ID: ${error.message}`);
