@@ -17,12 +17,14 @@ import { defineComponent } from "vue";
 export default defineComponent({
   data() {
     return {
-      file: "",
+      file: {} as File | undefined,
     };
   },
   methods: {
-    handleFileUpload(event) {
-      this.file = event.target.files[0];
+    handleFileUpload(event: Event): void {
+      const target = event.target as HTMLInputElement;
+      this.file = target.files ? target.files[0] : undefined;
+      if (!this.file) return;
       let formData = new FormData();
       formData.append("file", this.file);
       this.$store.dispatch("fileversions/createFileVersion", {
