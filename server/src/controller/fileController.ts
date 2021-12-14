@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import { Error } from "mongoose";
-const File = require("../model/file");
+const File = require("../model/file"),
+  FileVersions = require("../model/fileVersions");
 
 module.exports = {
   find: (req: Request, res: Response) => {  
@@ -15,22 +16,46 @@ module.exports = {
       });
   },
 
-  create: (req: Request, res: Response) => {
-    let fileParams = {
-      title: req.body.title,
-      createdAt: Date.now(),
-      content: req.body.content
-    }
-    console.log(`creating file: ${fileParams}`);
-    File.create(fileParams)
-    .then((file: File) => {
-      res.json(file)
+  findAll: (req: Request, res: Response) => {
+    let fileVersionsId = req.params.fileVersionsId;
+    FileVersions.findById(fileVersionsId)
+    .then((fileVersions: any) => {
+        const allFiles = fileVersions.files;
+        if (!allFiles){
+            res.status(404).send("No files found")
+        }
+        res.status(200).json(allFiles);
     })
     .catch((error: Error) => {
-      console.log(`Error creating new file: ${error.message}`)
-      return;
-    })
+        res.status(500).send(`Error fetching files: ${error.message}`);
+    });
   },
+
+  create: (req: Request, res: Response) => {
+    let fileVersionsId = req.params.fileVersionsId;
+    let fileParams = {
+        title: req.body.title,
+        createdAt: Date.now(),
+        content: req.body.content
+    }
+    File.create(fileParams)
+    .then((file: any) => {
+        FileVersions.findByIdAndUpdate(fileVersionsId,
+            { $set: { files: file } },
+            { new: true }
+        )
+        .then((file: any) => {
+            console.log(file)
+            res.status(201).json(file)
+        })
+        .catch((error: Error) => {
+            res.status(500).send(`Could not find parent file: ${error.message}`);
+        })
+    })
+    .catch((error: Error) => {
+        res.status(500).send(`Error creating file version: ${error.message}`);
+    })
+},
 
   delete: (req: Request, res: Response) => {
     let fileId = req.params.id;
