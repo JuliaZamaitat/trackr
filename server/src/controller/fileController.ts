@@ -6,7 +6,6 @@ const File = require("../model/file"),
 module.exports = {
   find: (req: Request, res: Response) => {  
     let fileId = req.params.fileId;
-    console.log(`finding file: ${fileId}`);
     File.findById(fileId)
       .then((file: any) => {
         res.json(file);
@@ -42,7 +41,6 @@ module.exports = {
     }
     File.create(fileParams)
     .then((file: any) => {
-      console.log(file)
         FileVersions.findByIdAndUpdate(fileVersionsId,
             { $push: { files: file } },
             { new: true }
