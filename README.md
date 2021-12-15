@@ -21,3 +21,10 @@ cd server & npm start
 
 First build the project with `docker compose build`
 Second run it using `docker compose up -d`, look at output with `docker compose logs` or stop it via `docker compose down`.
+
+
+## Testing Frontend
+
+```
+cd client && npm run test
+```

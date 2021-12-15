@@ -26,50 +26,53 @@
 
 <script lang="ts">
 import { defineComponent } from "vue";
+import { FileVersions } from "../types/FileVersions.interface";
+import { File } from "../types/File.interface";
+
 export default defineComponent({
   data() {
     return {
-      currentFileVersion: {},
-      currentId: Number(window.location.pathname.split("/")[2]),
-      selectedFile: { id: 0, title: "", content: "", created_at: null },
-      fileVersions: [] as Array<any>,
+      currentFileVersion: {} as FileVersions,
+      currentId: Number(window.location.pathname.split("/")[2]).toString(),
+      selectedFile: {} as File,
+      fileVersions: [] as FileVersions[],
       allFileVersions: [
         {
           title: "Meine ersten Files",
-          id: 2,
+          id: "2",
           files: [
             {
-              id: 10,
+              id: "10",
               title: "Hello",
               content: "Lorem Ipsum ....",
-              created_at: Date(),
+              created_at: Date().toString(),
             },
             {
-              id: 20,
+              id: "20",
               title: "Hello2",
               content: "Lorem Ipsum 2",
-              created_at: Date(),
+              created_at: Date().toString(),
             },
-          ],
+          ] as File[],
         },
 
         {
           title: "Meine zweiten Files",
-          id: 3,
+          id: "3",
           files: [
             {
-              id: 210,
+              id: "210",
               title: "Testtest",
               content: "Lorem Ipsum testete",
-              created_at: Date(),
+              created_at: Date().toString(),
             },
             {
-              id: 213,
+              id: "213",
               title: "Testtest2222",
               content: "Lorem Ipsum xsxsxsxsqqwq",
-              created_at: Date(),
+              created_at: Date().toString(),
             },
-          ],
+          ] as File[],
         },
       ],
     };
@@ -87,16 +90,15 @@ export default defineComponent({
     }
   },
   methods: {
-    selectedFileChange(index: any) {
+    selectedFileChange(index: number): void {
       const currentFile = this.fileVersions[index];
       this.selectedFile = currentFile;
     },
-    getDate(value: any) {
+    getDate(value: Date): string {
       var dt = new Date(value);
       var dtd = dt.getDay();
       var dtm = dt.getMonth();
       var dty = dt.getFullYear();
-
       return dtd + "/" + dtm + "/" + dty;
     },
   },
