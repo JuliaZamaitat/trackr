@@ -22,6 +22,8 @@
 <script lang="ts">
 import { defineComponent } from "vue";
 import UploadButton from "../components/UploadButton.vue";
+import { FileVersions } from "../types/FileVersions.interface";
+import { File } from "../types/File.interface";
 
 export default defineComponent({
   components: { UploadButton },
@@ -34,38 +36,38 @@ export default defineComponent({
         //So sehen die Daten später aus, die wir über die API Schnittstelle bekommen
         {
           title: "Meine ersten Files",
-          id: 2,
+          id: "2",
           files: [
             {
               title: "Hello",
               content: "Lorem Ipsum ....",
-              created_at: Date.now().toString,
+              created_at: Date.now().toString(),
             },
             {
               title: "Hello2",
               content: "Lorem Ipsum 2",
-              created_at: Date.now().toString,
+              created_at: Date.now().toString(),
             },
-          ],
+          ] as Array<File>,
         },
 
         {
           title: "Meine zweiten Files",
-          id: 3,
+          id: "3",
           files: [
             {
               title: "Testtest",
               content: "Lorem Ipsum ....",
-              created_at: Date.now().toString,
+              created_at: Date.now().toString(),
             },
             {
               title: "Testtest",
               content: "Lorem Ipsum 2",
-              created_at: Date.now().toString,
+              created_at: Date.now().toString(),
             },
-          ],
+          ] as Array<File>,
         },
-      ],
+      ] as FileVersions,
     };
   },
 });

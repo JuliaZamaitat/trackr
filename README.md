@@ -33,3 +33,11 @@ cd server & npm start
 - show logs of the application with `docker compose logs` 
 - to stop the containers enter `docker compose down`
 
+
+
+## Testing Frontend
+
+```
+cd client && npm run test
+```
+
