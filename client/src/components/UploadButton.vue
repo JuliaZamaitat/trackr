@@ -15,6 +15,12 @@
 import { defineComponent } from "vue";
 
 export default defineComponent({
+  props: {
+    id: {
+      type: String,
+      default: "",
+    },
+  },
   data() {
     return {
       file: {} as File | undefined,
@@ -24,11 +30,16 @@ export default defineComponent({
     handleFileUpload(event: Event): void {
       const target = event.target as HTMLInputElement;
       this.file = target.files ? target.files[0] : undefined;
+      const fileName = target.value.split(/(\\|\/)/g).pop();
       if (!this.file) return;
       let formData = new FormData();
       formData.append("file", this.file);
-      this.$store.dispatch("fileversions/createFileVersion", {
-        formData,
+      this.$store.dispatch("fileversions/addFileToFileVersion", {
+        id: this.id,
+        file: {
+          title: fileName,
+          content: formData.toString(),
+        },
       });
     },
   },
