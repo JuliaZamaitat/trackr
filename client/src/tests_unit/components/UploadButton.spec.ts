@@ -1,7 +1,5 @@
-/* eslint-disable @typescript-eslint/no-empty-function */
 import { mount } from "@vue/test-utils";
 import { expect } from "@jest/globals";
-import vueRouter from "vue-router";
 
 import UploadButton from "../../components/UploadButton.vue";
 

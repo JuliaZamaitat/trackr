@@ -1,15 +1,12 @@
-/* eslint-disable @typescript-eslint/no-empty-function */
 import { mount } from "@vue/test-utils";
 import { expect } from "@jest/globals";
-
-// import Vuex from "vuex";
 
 import File from "../../components/File.vue";
 
 const $store = {
   namespaced: true,
   getters: {
-    "fileversions/getFileVersionById": (state: any, id: any) => {
+    "fileversions/getFileVersionById": () => {
       return "2";
     },
   },
