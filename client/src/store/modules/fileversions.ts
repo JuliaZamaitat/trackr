@@ -1,7 +1,7 @@
 import { FileVersions } from "@/src/types/FileVersions.interface";
 import FileVersionsService from "../../services/FileVersionsService";
 import { AxiosError, AxiosResponse } from "axios";
-import { ActionTree, MutationTree } from "vuex";
+import { ActionTree, GetterTree, MutationTree } from "vuex";
 import { FileVersionsState, RootState } from "../../types/Store.interface";
 
 export const namespaced = true;
@@ -34,46 +34,48 @@ export const mutations: MutationTree<FileVersionsState> = {
 };
 
 export const actions: ActionTree<FileVersionsState, RootState> = {
-  async fetchFileVersion({ state, commit }, id: string): Promise<void> {
-    try {
-      commit(FileVersionsMutations.SET_PENDING, true);
-      const fileVersion: FileVersions | undefined = state.fileVersions?.find(
-        (version) => version.id === id
-      );
-      if (!fileVersion) {
-        await FileVersionsService.fetchFileVersion(id)
-          .then((response: AxiosResponse) => {
-            const fileVersions = state.fileVersions || [];
-            fileVersions.push(response.data);
-            commit(FileVersionsMutations.SET_FILE_VERSIONS, fileVersions);
-            commit(FileVersionsMutations.SET_FILE_VERSION, response.data);
-          })
-          .catch(async (error: AxiosError) => {
-            const notification = {
-              type: "error",
-              message:
-                "There was a problem fetching fileVersion with id " +
-                id +
-                ": " +
-                error.message,
-            };
-            console.log(notification);
-          });
-      } else {
-        commit(FileVersionsMutations.SET_FILE_VERSION, fileVersion);
-      }
-    } finally {
-      commit(FileVersionsMutations.SET_PENDING, false);
-    }
-  },
+  // async fetchFileVersion({ state, commit }, id: string): Promise<void> {
+  //   try {
+  //     commit(FileVersionsMutations.SET_PENDING, true);
+  //     const fileVersion: FileVersions | undefined = state.fileVersions?.find(
+  //       (version) => version._id === id
+  //     );
+  //     if (!fileVersion) {
+  //       await FileVersionsService.fetchFileVersion(id)
+  //         .then((response: AxiosResponse) => {
+  //           const fileVersions = state.fileVersions;
+  //           if (!fileVersions) return;
+  //           fileVersions.push(response.data[0]);
+  //           commit(FileVersionsMutations.SET_FILE_VERSIONS, fileVersions);
+  //           commit(FileVersionsMutations.SET_FILE_VERSION, response.data);
+  //         })
+  //         .catch(async (error: AxiosError) => {
+  //           const notification = {
+  //             type: "error",
+  //             message:
+  //               "There was a problem fetching fileVersion with id " +
+  //               id +
+  //               ": " +
+  //               error.message,
+  //           };
+  //           console.log(notification);
+  //         });
+  //     } else {
+  //       commit(FileVersionsMutations.SET_FILE_VERSION, fileVersion);
+  //     }
+  //   } finally {
+  //     commit(FileVersionsMutations.SET_PENDING, false);
+  //   }
+  // },
   async fetchFileVersions({ commit }) {
     try {
       commit(FileVersionsMutations.SET_PENDING, true);
-
+      commit(FileVersionsMutations.SET_FILE_VERSIONS, []);
       await FileVersionsService.fetchFileVersions()
         .then((response: AxiosResponse) => {
-          const fileVersions = state.fileVersions || [];
-          fileVersions.push(response.data);
+          let fileVersions = state.fileVersions;
+          if (!fileVersions) return;
+          fileVersions = response.data;
           commit(FileVersionsMutations.SET_FILE_VERSIONS, fileVersions);
         })
         .catch(async (error: AxiosError) => {
@@ -88,14 +90,13 @@ export const actions: ActionTree<FileVersionsState, RootState> = {
       commit(FileVersionsMutations.SET_PENDING, false);
     }
   },
-  async createFileVersion({ state, commit }, { formData }) {
+  async createFileVersion({ state, commit }, title) {
     try {
-      console.log("heeeere");
-
       commit(FileVersionsMutations.SET_PENDING, true);
-      await FileVersionsService.createFileVersion(formData)
+      await FileVersionsService.createFileVersion(title)
         .then((response) => {
-          const fileVersions = state.fileVersions || [];
+          const fileVersions = state.fileVersions;
+          if (!fileVersions) return;
           fileVersions.push(response.data);
           commit(FileVersionsMutations.SET_FILE_VERSIONS, fileVersions);
           commit(FileVersionsMutations.SET_FILE_VERSION, response.data);
@@ -111,5 +112,71 @@ export const actions: ActionTree<FileVersionsState, RootState> = {
     } finally {
       commit(FileVersionsMutations.SET_PENDING, false);
     }
+  },
+  async deleteFileVersion(
+    { state, commit },
+    payload: { id: string }
+  ): Promise<void> {
+    try {
+      await FileVersionsService.deleteFileVersion(payload.id)
+        .then((response: AxiosResponse) => {
+          const fileVersions = state.fileVersions;
+          if (!fileVersions) return;
+          fileVersions.splice(fileVersions.indexOf(response.data), 1);
+          commit(FileVersionsMutations.SET_FILE_VERSIONS, fileVersions);
+          commit(FileVersionsMutations.SET_FILE_VERSION, response.data);
+        })
+        .catch(async (error: AxiosError) => {
+          const notification = {
+            type: "error",
+            message:
+              "There was a problem deleting fileVersion with id " +
+              payload.id +
+              ": " +
+              error.message,
+          };
+          console.log(notification);
+        });
+    } finally {
+      commit(FileVersionsMutations.SET_PENDING, false);
+    }
+  },
+  async addFileToFileVersion(
+    { state, commit },
+    payload: { id: string; file: FileVersions }
+  ): Promise<void> {
+    try {
+      await FileVersionsService.createFileInFileVersion(
+        payload.id,
+        payload.file
+      )
+        .then((response: AxiosResponse) => {
+          const fileVersions = state.fileVersions;
+          if (!fileVersions) return;
+          fileVersions.splice(fileVersions.indexOf(response.data), 1);
+          fileVersions.push(response.data);
+          commit(FileVersionsMutations.SET_FILE_VERSIONS, fileVersions);
+          commit(FileVersionsMutations.SET_FILE_VERSION, response.data);
+        })
+        .catch(async (error: AxiosError) => {
+          const notification = {
+            type: "error",
+            message:
+              "There was a problem creating a file for fileVersion with id " +
+              payload.id +
+              ": " +
+              error.message,
+          };
+          console.log(notification);
+        });
+    } finally {
+      commit(FileVersionsMutations.SET_PENDING, false);
+    }
+  },
+};
+
+export const getters: GetterTree<FileVersionsState, RootState> = {
+  getFileVersionById: (state) => (id: string) => {
+    return state.fileVersions?.find((f) => f._id == id);
   },
 };

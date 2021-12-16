@@ -44,7 +44,7 @@ module.exports = {
         FileVersions.findByIdAndUpdate(fileVersionsId,
             { $push: { files: file } },
             { new: true }
-        )
+        ).populate("files")
         .then((file: any) => {
             res.status(201).json(file)
         })

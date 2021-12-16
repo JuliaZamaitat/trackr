@@ -6,9 +6,9 @@ const FileVersions = require("../model/fileVersions"),
 module.exports = {
     find: (req: Request, res: Response) => {  
         let fileVersionsId = req.params.fileVersionsId;
-        FileVersions.findById(fileVersionsId)
-          .then((fileVersions: any) => {
-            res.status(200).json(fileVersions);
+        FileVersions.findById(fileVersionsId).populate("files")
+        .then((fileVersions: any) => {
+          return res.status(200).json(fileVersions);
           })
           .catch((error: Error) => {
             res.status(500).send(`Error fetching file versions by ID: ${error.message}`);
@@ -17,7 +17,7 @@ module.exports = {
       },
 
     findAll: (req: Request, res: Response) => {
-        FileVersions.find().then((allFileVersions: any) => {
+        FileVersions.find().populate("files").then((allFileVersions: any) => {
           if (!allFileVersions){
             res.status(404).send("No file versions found")
         }
@@ -29,7 +29,7 @@ module.exports = {
     },
 
     create: (req: Request, res: Response) => {
-        let fileVersionsParams = {
+      let fileVersionsParams = {
           title: req.body.title
         }
         FileVersions.create(fileVersionsParams)
@@ -44,11 +44,22 @@ module.exports = {
 
     delete: (req: Request, res: Response) => {
         let fileVersionsId = req.params.fileVersionsId;
+         FileVersions.findById(fileVersionsId).populate("files").then((fileVersions: any) => {           
+          for(let file in fileVersions.files){
+            File.findByIdAndDelete(fileVersions.files[file].id).then((file: any) => {
+             res.status(200).json(`File versions deleted: ${fileVersions.id}`)
+            })
+            .catch((error: Error) => {          
+                res.status(500).send(`Error deleting file: ${error.message}`)
+                return;
+            })
+          } 
+      });
         FileVersions.findByIdAndDelete(fileVersionsId)
         .then((fileVersions: any) => {
-          res.json(`File versions deleted: ${fileVersions.id}`)
+          res.status(200).json(`File versions deleted: ${fileVersions.id}`)
         })
-        .catch((error: Error) => {
+        .catch((error: Error) => {          
             res.status(500).send(`Error deleting file versions by ID: ${error.message}`)
             return;
         })
@@ -59,7 +70,8 @@ module.exports = {
         FileVersions.findByIdAndUpdate(fileVersionsId,
           {
             $set: {
-              title: req.body.title
+              title: req.body.title,
+              files: req.body.files
             },
           },
           { new: true }

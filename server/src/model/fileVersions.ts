@@ -4,10 +4,8 @@ const mongoose = require("mongoose"),
     title: String,
     files: [
       {
-        file: {
           type: Schema.Types.ObjectId,
           ref: "File",
-        },
       },
     ],
   });
