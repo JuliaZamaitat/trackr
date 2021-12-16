@@ -2,7 +2,8 @@
   <button @click="createFileVersions" class="fileversion-creation">
     Create FileVersion
   </button>
-  <CreateFileVersionModal
+  <Modal
+    class="modal"
     v-show="showModal"
     v-on:confirm="confirm"
     v-on:cancel="cancel"
@@ -14,15 +15,15 @@
         style="border: 1px solid black; width: 100%"
         type="text"
     /></template>
-  </CreateFileVersionModal>
+  </Modal>
 </template>
 
 <script lang="ts">
 import { defineComponent } from "vue";
-import CreateFileVersionModal from "./CreateFileVersionModal.vue";
+import Modal from "./Modal.vue";
 
 export default defineComponent({
-  components: { CreateFileVersionModal },
+  components: { Modal },
   data() {
     return {
       showModal: false,
