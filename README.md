@@ -37,7 +37,12 @@ cd server & npm start
 
 ## Testing Frontend
 
+### Unit Tests
 ```
-cd client && npm run test
+cd client && npm run test:unit
+```
+### E2E Tests
+```
+cd client && npm run test:e2e
 ```
 
