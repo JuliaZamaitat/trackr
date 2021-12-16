@@ -18,7 +18,7 @@
     "sourceMap": true,
     "baseUrl": ".",
     "types": [
-      "webpack-env", "node"
+      "webpack-env", "node", "jest"
     ],
     "lib": [
       "esnext",
@@ -31,8 +31,10 @@
     "src/**/*.ts",
     "src/**/*.tsx",
     "src/**/*.vue",
-    "tests/**/*.ts",
-    "tests/**/*.tsx"
+    "src/tests_unit/**/*.ts",
+    "src/tests_unit/**/*.tsx",
+    "src/tests_e2e/**/*.ts",
+    "src/tests_e2e/**/*.tsx"
 , "src/store/index.js", "src/store/modules/fileversions.ts"  ],
   "exclude": [
     "node_modules",
