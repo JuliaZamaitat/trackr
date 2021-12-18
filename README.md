@@ -33,7 +33,8 @@ cd server & npm start
 - show logs of the application with `docker compose logs` 
 - to stop the containers enter `docker compose down`
 
-
+#### seed database
+- run `docker compose run server node src/seeds/index.js`
 
 ## Testing Frontend
 
