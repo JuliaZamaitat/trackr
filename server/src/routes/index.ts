@@ -1,6 +1,6 @@
 const router = require("express").Router(),
-    fileController = require("../controller/fileController"),
-    fileVersionsController = require("../controller/fileVersionsController");
+  fileController = require("../controller/fileController"),
+  fileVersionsController = require("../controller/fileVersionsController");
 
 
 // Handlers for File Versions

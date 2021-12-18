@@ -12,4 +12,4 @@ const mongoose = require("mongoose"),
 
 module.exports = mongoose.model("File", fileSchema);
 
-export {} //typescript fix for variables
+export { } //typescript fix for variables
