@@ -7,7 +7,7 @@ const mongodbURI =
 
 describe('Get all files request', () => {
   let mockRequest: Partial<Request>;
-  let mockResponse: Partial<Response>;
+  let mockResponse: any; //Partial<Response>;
   let responseObject: any;
   let mongoClient: typeof mongoose;
 
@@ -23,10 +23,19 @@ describe('Get all files request', () => {
     mockRequest = {};
     const mockResponseGenerator = () => {
       const res: any = {};
-      res.status = jest.fn().mockReturnValue(res);
-      res.json = jest.fn().mockReturnValue(res);
+      res.status = jest.fn().mockImplementation((st) => {res.statusCode = st; return res;});
+      res.json = jest.fn().mockImplementation((json:string) => {res.responseSent(json) ; return res;});
+      res.send = jest.fn().mockImplementation((value: any) =>{
+        res.responseSent(value);
+      });
+      res.waitForResponse = new Promise((success,error) =>{
+        // @ts-ignore
+        res.responseSent = success;
+      });
       return res;
     };
+
+
     mockResponse = mockResponseGenerator();
   });
 
@@ -34,7 +43,7 @@ describe('Get all files request', () => {
   //  await mongoClient.connection.db.dropDatabase();
   });
 
-  test('200 - files', () => {
+  test('200 - files', (done) => {
     const expectedStatusCode = 200;
     const expectedResponse = {
       files: [
@@ -49,10 +58,20 @@ describe('Get all files request', () => {
       ]
     };
 
-    fileVersionsController.findAll(mockRequest as Request, mockResponse as Response);
 
-    expect(mockResponse.statusCode).toBe(expectedStatusCode);
-    expect(responseObject).toEqual(expectedResponse);
+    try {
+      mockResponse.waitForResponse
+        .then((dataSent: any)  => {
+          expect(mockResponse.statusCode).toBe(expectedStatusCode);
+          expect(dataSent).toEqual(expectedResponse);
+          done()
+        })
+    } catch (error) {
+      done(error);
+    }
+
+    fileVersionsController.findAll(mockRequest as Request, mockResponse as Response);
   })
+
 
 })
