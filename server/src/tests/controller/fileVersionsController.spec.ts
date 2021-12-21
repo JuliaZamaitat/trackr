@@ -1,5 +1,6 @@
 import mongoose from 'mongoose';
 import { Request, Response } from 'express';
+const FileVersions = require( "../../model/fileVersions");
 const fileVersionsController = require("../../controller/fileVersionsController")
 
 const mongodbURI =
@@ -41,29 +42,16 @@ describe('Get all files request', () => {
 
   afterEach(async () => {
   //  await mongoClient.connection.db.dropDatabase();
+    await FileVersions.deleteMany();
   });
 
   test('200 - files', (done) => {
     const expectedStatusCode = 200;
-    const expectedResponse = {
-      files: [
-        {
-          title: "foo bar",
-          content: "hey ho, lets go"
-        },
-        {
-          title: "bar baz",
-          content: "lorem ipsum"
-        }
-      ]
-    };
-
 
     try {
       mockResponse.waitForResponse
         .then((dataSent: any)  => {
           expect(mockResponse.statusCode).toBe(expectedStatusCode);
-          expect(dataSent).toEqual(expectedResponse);
           done()
         })
     } catch (error) {
@@ -71,6 +59,37 @@ describe('Get all files request', () => {
     }
 
     fileVersionsController.findAll(mockRequest as Request, mockResponse as Response);
+  })
+
+
+  // @ts-ignore
+  test('response - files',   (done) => {
+    // this response cannot be returned
+
+    const expectedResponse = {
+      files: [
+        {
+          title: "foo bar"
+        },
+        {
+          title: "bar baz"
+        }
+      ]
+    };
+
+    try {
+      mockResponse.waitForResponse
+        .then((dataSent: any)  => {
+           expect(dataSent.length).toEqual(2);
+          done()
+        })
+    } catch (error) {
+      done(error);
+    }
+    const result =  FileVersions.create(expectedResponse.files)
+      .then((createResult:any) =>{
+    fileVersionsController.findAll(mockRequest as Request, mockResponse as Response);
+    })
   })
 
 
