@@ -21,17 +21,17 @@ describe('Get all files request', () => {
 
   beforeEach(() => {
     mockRequest = {};
-    mockResponse = {
-      status: jest.fn(),
-      json: jest.fn(),
-      send: jest.fn().mockImplementation(result => {
-        responseObject = result;
-      })
-    }
+    const mockResponseGenerator = () => {
+      const res: any = {};
+      res.status = jest.fn().mockReturnValue(res);
+      res.json = jest.fn().mockReturnValue(res);
+      return res;
+    };
+    mockResponse = mockResponseGenerator();
   });
 
   afterEach(async () => {
-    await mongoClient.connection.db.dropDatabase();
+  //  await mongoClient.connection.db.dropDatabase();
   });
 
   test('200 - files', () => {
