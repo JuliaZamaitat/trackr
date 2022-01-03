@@ -6,7 +6,7 @@ const express = require("express"),
   router = require("./routes/index"),
   historyMode = require("connect-history-api-fallback");
 
-
+  
 const mongodbURI =
   process.env.MONGODB_URI || "mongodb://localhost:27017/trackr";
 

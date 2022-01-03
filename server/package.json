@@ -27,12 +27,13 @@
     "nodemon": "^2.0.15",
     "ts-jest": "^27.1.2",
     "ts-node": "^10.4.0",
-    "typescript": "^4.5.2"
+    "typescript": "^4.5.2",
+    "supertest": "^4.0.2"
   },
   "jest": {
     "preset": "ts-jest",
     "testMatch": [
-      "**/?(*.)+(spec).ts"
+      "**/?(*.)+(spec).js"
     ],
     "resetMocks": true,
     "clearMocks": true
