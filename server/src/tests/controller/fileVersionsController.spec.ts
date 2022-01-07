@@ -1,6 +1,7 @@
 import mongoose from 'mongoose';
 import { Request, Response } from 'express';
 const FileVersions = require( "../../model/fileVersions");
+const File = require( "../../model/file");
 const fileVersionsController = require("../../controller/fileVersionsController")
 
 const mongodbURI =
@@ -43,6 +44,7 @@ describe('Get all files request', () => {
   afterEach(async () => {
   //  await mongoClient.connection.db.dropDatabase();
     await FileVersions.deleteMany();
+    await File.deleteMany();
   });
 
   test('200 - files', (done) => {
