@@ -1,6 +1,6 @@
 {
   "component": {
-    "componentFolder": "src/tests",
+    "componentFolder": "src/tests_e2e",
     "testFiles": "**/*.spec.ts"
   }
 }
