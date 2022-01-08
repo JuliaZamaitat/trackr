@@ -47,16 +47,16 @@ jobs:
           npm run test
    
    
-    dockerize:
-      needs: [test-frontend, test-backend]
+  dockerize:
+    needs: [test-frontend, test-backend]
       
-      runs-on: ubuntu-latest
+    runs-on: ubuntu-latest
     
-      steps:
+    steps:
         - uses: actions/checkout@v2
         - uses: isbang/compose-action@v1.0.0
           with:
-          compose-file: './compose.yml'
+            compose-file: './compose.yml'
       
    # Deployment to server missing  
     
