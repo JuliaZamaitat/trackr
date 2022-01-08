@@ -5,12 +5,13 @@ services:
       context: server
       dockerfile: Dockerfile
     environment:
-#      - NODE_ENV=production
+      # - NODE_ENV=production
       - "MONGODB_URI=mongodb://mongo:27017/trackr"
       - "PORT=3000"
       - "MONGO_INITDB_DATABASE=trackr"
-    # volumes:
-    #  - ./server/src:/app/src:ro
+    volumes:
+     - ./server/:/app
+     - /app/node_modules
     # user: "${UID}:${GID}"
     ports:
         - "3000:3000"
