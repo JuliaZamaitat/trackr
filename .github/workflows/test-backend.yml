@@ -28,9 +28,9 @@ jobs:
       with:
         mongodb-version: 5.0
 
-      # Runs a set of commands using the runners shell
-      - run: |
-          cd server
-          npm ci
-          npm run build
-          npm run test
+    # Runs a set of commands using the runners shell
+    - run: |
+        cd server
+        npm ci
+        npm run build
+        npm run test
