@@ -14,8 +14,19 @@ jobs:
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
+    - name: Git checkout
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-      - uses: actions/checkout@v2
+      uses: actions/checkout@v2
+
+    - name: Use Node.js 17
+      uses: actions/setup-node@v2
+      with:
+        node-version: 17
+
+    - name: Start MongoDB
+      uses: supercharge/mongodb-github-action@1.7.0
+      with:
+        mongodb-version: 5.0
 
       # Runs a set of commands using the runners shell
       - run: |
