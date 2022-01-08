@@ -1,0 +1,62 @@
+name: CI/CD
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  test-frontend:
+    
+    runs-on: ubuntu-latest
+    
+    steps:
+      - uses: actions/checkout@v2
+
+      - run: |
+          cd client
+          npm ci
+          npm run build
+          npm run test:unit
+ 
+ 
+  test-backend:
+  
+    runs-on: ubuntu-latest
+  
+    steps:
+    
+      - name: Git checkout
+        uses: actions/checkout@v2
+
+      - name: Use Node.js 17
+        uses: actions/setup-node@v2
+        with:
+          node-version: 17
+
+      - name: Start MongoDB
+        uses: supercharge/mongodb-github-action@1.7.0
+        with:
+          mongodb-version: 5.0
+
+      - run: |
+          cd server
+          npm ci
+          npm run build
+          npm run test
+   
+   
+    dockerize:
+      needs: [test-frontend, test-backend]
+      
+      runs-on: ubuntu-latest
+    
+      steps:
+        - uses: actions/checkout@v2
+        - uses: isbang/compose-action@v1.0.0
+          with:
+          compose-file: './compose.yml'
+      
+   # Deployment to server missing  
+    
